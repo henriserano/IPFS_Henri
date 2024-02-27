@@ -1,0 +1,25 @@
+name: Deploy to IPFS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Dependencies
+      run: npm install
+    - name: Build
+      run: npm run build
+    - name: IPFS Pinata deploy GitHub action
+      uses: popovoleksandr/ipfs-pinata-deploy-action@v1.6.3
+      with:
+        pin-name: 'My decentralized app'
+        path: './build'
+        pinata-api-key: ${{ secrets.PINATA_API_KEY }}
+        pinata-secret-api-key: ${{ secrets.PINATA_SECRET_API_KEY }}
+        verbose: true
+        remove-old: true
